@@ -8,7 +8,7 @@ print('Loading function')
 
 def respond(err, res=None):
     return {
-        'statusCode': '400' if err else '200',
+        'statusCode': 400 if err else 200,
         'body': err.message if err else json.dumps(res),
         'headers': {
             'Content-Type': 'application/json',
@@ -17,16 +17,19 @@ def respond(err, res=None):
 
 
 def get_intent(event):
-    intent = event['body']['queryResult']['intent']['name']
+    intent = event['queryResult']['intent']['name']
     intent = intent.rsplit('/', 1)[1]
     return intent
 
 
 def lambda_handler(event, context):
-    intent_type = get_intent(event)
+    event = json.loads(event['body'])
 
+    intent_type = get_intent(event)
     intent = Intent(event)
-    if intent_type == IntentType.LIST_EC2:
+
+    if intent_type == IntentType.LIST_EC2.value:
+        print('oi')
         intent = ListEC2Intent(event)
 
     return_json = intent.run()

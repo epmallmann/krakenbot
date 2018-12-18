@@ -8,8 +8,14 @@ class ListEC2Intent(Intent):
         return_json = {}
         cards = []
 
+        ec2_target_type_param = self.event['queryResult']['parameters']['EC2TargetType']
+        filters = []
+
+        if ec2_target_type_param != '':
+            filters.append({'Name': 'tag:TargetGroup', 'Values': [ec2_target_type_param]})
+
         ec2 = boto3.client('ec2')
-        response = ec2.describe_instances()
+        response = ec2.describe_instances(Filters=filters)
         reservations = response['Reservations']
 
         for reservation in reservations:
@@ -19,6 +25,8 @@ class ListEC2Intent(Intent):
                 for tag in inst['Tags']:
                     if tag['Key'] == 'Name':
                         name = tag['Value']
+                name = name + ' - ' + inst['State']['Name']
                 cards.append({'card': {'title': inst['InstanceId'], 'subtitle': name}})
 
         return_json['fulfillmentMessages'] = cards
+        return return_json
