@@ -1,34 +1,34 @@
 import json
-import boto3
+from intents.Intent import Intent
+from intents.ListEC2Intent import ListEC2Intent
+from intents.IntentType import IntentType
 
 print('Loading function')
-dynamo = boto3.client('dynamodb')
 
 
 def respond(err, res=None):
     return {
         'statusCode': '400' if err else '200',
-        'body': err.message if err else json.dump(res),
+        'body': err.message if err else json.dumps(res),
         'headers': {
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
     }
 
 
+def get_intent(event):
+    intent = event['body']['queryResult']['intent']['name']
+    intent = intent.rsplit('/', 1)[1]
+    return intent
+
+
 def lambda_handler(event, context):
-    ec2 = boto3.client('ec2')
-    response = ec2.describe_regions()
-    regions = response['Regions']
+    intent_type = get_intent(event)
 
-    j = {}
-    cards = []
+    intent = Intent(event)
+    if intent_type == IntentType.LIST_EC2:
+        intent = ListEC2Intent(event)
 
-    for region in regions:
-        card = {}
-        # but = [{'text': 'button1', 'postback': 'https://google.com'}]
-        # card['card'] = {'title': region['RegionName'], 'subtitle': region['Endpoint']}
-        cards.append({'card': {'title': region['RegionName'], 'subtitle': region['Endpoint']}})
+    return_json = intent.run()
 
-    j['fulfillmentMessages'] = cards
-
-    return respond(None, j)
+    return respond(None, return_json)
