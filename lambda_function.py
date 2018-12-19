@@ -1,6 +1,8 @@
 import json
 from intents.Intent import Intent
 from intents.ListEC2Intent import ListEC2Intent
+from intents.GetLogIntent import GetLogIntent
+from intents.GenerateS3UrlIntent import GenerateS3UrlIntent
 from intents.IntentType import IntentType
 
 print('Loading function')
@@ -29,8 +31,11 @@ def lambda_handler(event, context):
     intent = Intent(event)
 
     if intent_type == IntentType.LIST_EC2.value:
-        print('oi')
         intent = ListEC2Intent(event)
+    elif intent_type == IntentType.GET_LOG.value:
+        intent = GetLogIntent(event)
+    elif intent_type == IntentType.S3_URL.value:
+        intent = GenerateS3UrlIntent(event)
 
     return_json = intent.run()
 
