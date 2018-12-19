@@ -3,6 +3,7 @@ from intents.Intent import Intent
 from intents.ListEC2Intent import ListEC2Intent
 from intents.GetLogIntent import GetLogIntent
 from intents.GenerateS3UrlIntent import GenerateS3UrlIntent
+from intents.CheckTGHealthIntent import CheckTGHealthIntent
 from intents.IntentType import IntentType
 
 print('Loading function')
@@ -36,6 +37,8 @@ def lambda_handler(event, context):
         intent = GetLogIntent(event)
     elif intent_type == IntentType.S3_URL.value:
         intent = GenerateS3UrlIntent(event)
+    elif intent_type == IntentType.TG_HEALTH.value:
+        intent = CheckTGHealthIntent(event)
 
     return_json = intent.run()
 
