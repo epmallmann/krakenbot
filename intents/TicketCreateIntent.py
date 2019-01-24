@@ -19,7 +19,7 @@ class TicketCreateIntent(Intent):
 			'category': 'Solicitação de serviço',
 			'urgency': 'Alta',
 			'status': 'Novo',
-			'clients': [{'id': '539639646'}],
+			'clients': [person],
 			'actions': [{'id': 1,'type': 1, 'description': subject}]
 		}
 
