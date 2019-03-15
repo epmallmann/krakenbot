@@ -7,4 +7,5 @@ class IntentType(Enum):
     S3_URL = '35d665c4-9ff9-4686-b7d1-2bc6652dfe83'
     TG_HEALTH = 'ece92beb-df3d-48ee-aefe-2d4f094eba6c'
     TICKET_CREATE = '045bc3cc-5626-4946-9ec0-d8fd2451a784'
+    LAUNCH_INSTANCE = '209cbbc6-5998-4339-a3e6-384ef9eef108'
 
