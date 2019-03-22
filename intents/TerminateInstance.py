@@ -3,7 +3,7 @@ import boto3
 import os
 
 
-class LaunchInstance(Intent):
+class TerminateInstance(Intent):
 
     def run(self):
         slack_user_id = self.event['originalDetectIntentRequest']['payload']['data']['user']
@@ -31,9 +31,12 @@ class LaunchInstance(Intent):
             return {'fulfillmentText': 'Grupo {} não encontrado!'.format(group_name)}
 
         original_desired_capacity = auto_scaling_groups['AutoScalingGroups'][0]['DesiredCapacity']
-        desired_capacity = int(original_desired_capacity) + int(qty)
+        desired_capacity = int(original_desired_capacity) - int(qty)
 
-        client_asg.set_desired_capacity(AutoScalingGroupName=group_name, DesiredCapacity=desired_capacity)
+        if desired_capacity < 0:
+            desired_capacity = 0
+
+#        client_asg.set_desired_capacity(AutoScalingGroupName=group_name, DesiredCapacity=desired_capacity)
 
         msg_capacity = 'Desired capacity alterado de {} para {}.'\
             .format(str(original_desired_capacity), str(desired_capacity))

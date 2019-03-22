@@ -6,6 +6,7 @@ from intents.GenerateS3UrlIntent import GenerateS3UrlIntent
 from intents.CheckTGHealthIntent import CheckTGHealthIntent
 from intents.TicketCreateIntent import TicketCreateIntent
 from intents.LaunchInstance import LaunchInstance
+from intents.TerminateInstance import TerminateInstance
 from intents.IntentType import IntentType
 
 print('Loading function')
@@ -45,6 +46,8 @@ def lambda_handler(event, context):
         intent = TicketCreateIntent(event)
     elif intent_type == IntentType.LAUNCH_INSTANCE.value:
         intent = LaunchInstance(event)
+    elif intent_type == IntentType.TERMINATE_INSTANCE.value:
+        intent = TerminateInstance(event)
 
     return_json = intent.run()
 

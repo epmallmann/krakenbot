@@ -8,4 +8,5 @@ class IntentType(Enum):
     TG_HEALTH = 'ece92beb-df3d-48ee-aefe-2d4f094eba6c'
     TICKET_CREATE = '045bc3cc-5626-4946-9ec0-d8fd2451a784'
     LAUNCH_INSTANCE = '209cbbc6-5998-4339-a3e6-384ef9eef108'
+    TERMINATE_INSTANCE = '9e26dccc-035e-4ff2-8285-d74b0364c94f'
 
